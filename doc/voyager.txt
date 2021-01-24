@@ -18,6 +18,17 @@ INTRO							*voyager-intro*
 
 
 ==============================================================================
+GETTING STARTED					*voyager-getting-started*
+
+Add the following lines to your |vimrc|:
+>
+	let g:loaded_netrw             = 1
+	let g:loaded_netrwFileHandlers = 1
+	let g:loaded_netrwPlugin       = 1
+	let g:loaded_netrwSettings     = 1
+<
+
+==============================================================================
 KEYMAPPINGS						*voyager-keymappings*
 
 lhs	function			rhs

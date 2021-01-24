@@ -9,6 +9,16 @@ As of now:
 * Vim only
 * Unix only
 
+
+## Getting started
+
+```vim
+let g:loaded_netrw             = 1
+let g:loaded_netrwFileHandlers = 1
+let g:loaded_netrwPlugin       = 1
+let g:loaded_netrwSettings     = 1
+```
+
 ## Specail thanks
 
 Inspired by:
