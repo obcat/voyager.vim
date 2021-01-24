@@ -45,7 +45,7 @@ function! voyager#init() abort "{{{
   let b:voyager_initialized = 1
 endfunction "}}}
 
-function! s:set_filenames(dir) abort "{{{
+function s:set_filenames(dir) abort "{{{
   let filenames = s:get_filenames(a:dir)
   " Prepend ":silent" command to suppress "--No lines in buffer--" message.
   silent keepjumps % delete _
@@ -53,7 +53,7 @@ function! s:set_filenames(dir) abort "{{{
 endfunction "}}}
 
 " Returns a list of file names in specified directory.
-function! s:get_filenames(dir) abort "{{{
+function s:get_filenames(dir) abort "{{{
   let show_hidden = get(b:, 'voyager_show_hidden',
     \               get(g:, 'voyager_show_hidden',
     \ 1))
@@ -80,7 +80,7 @@ function! s:get_filenames(dir) abort "{{{
 endfunction "}}}
 
 " Set cursor on alternate file.
-function! s:focus_on_altfile() abort "{{{
+function s:focus_on_altfile() abort "{{{
   let altfile = expand('#:p')
   if empty(altfile) || isdirectory(altfile)
     return
