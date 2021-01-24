@@ -28,3 +28,8 @@ Inspired by:
 * [lambdalisue/fern.vim](https://github.com/lambdalisue/fern.vim)
 
 Thank you to the developers!
+
+
+## License
+
+MIT License.
