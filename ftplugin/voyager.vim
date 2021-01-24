@@ -12,7 +12,7 @@ nnoremap <buffer> <silent> <Plug>(voyager-home)          :<C-u>call voyager#home
 nnoremap <buffer> <silent> <Plug>(voyager-reload)        :<C-u>call voyager#reload()<CR>
 nnoremap <buffer> <silent> <Plug>(voyager-toggle-hidden) :<C-u>call voyager#toggle_hidden()<CR>
 
-if !get(g:, 'voyager_no_default_key_mappings', 0)
+if !get(g:, 'voyager_no_default_keymappings', 0)
   if !hasmapto('<Plug>(voyager-open)', 'n')
     nmap <buffer> <nowait> <CR> <Plug>(voyager-open)
   endif
