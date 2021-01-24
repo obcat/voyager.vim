@@ -1,0 +1,88 @@
+*voyager.txt*	Minimal file explorer.
+
+==============================================================================
+CONTENTS
+
+	INTRO .................................... |voyager-intro|
+	KEYMAPPINGS .............................. |voyager-keymappings|
+	CONFIGURATION ............................ |voyager-configuration|
+	STATUSLINE ............................... |voyager-statusline|
+	HIGHLIGHTS ............................... |voyager-highlights|
+	ABOUT .................................... |voyager-about|
+
+
+==============================================================================
+INTRO							*voyager-intro*
+
+*voyager* is a filer plugin for Vim.
+
+
+==============================================================================
+KEYMAPPINGS						*voyager-keymappings*
+
+lhs	function			rhs
+--------------------------------------------------------------------------
+<CR>	Open file or enter directory.	<Plug>(voyager-open)
+
+-	Go up parent directory.		<Plug>(voyager-up)
+
+~	Go to home directory.		<Plug>(voyager-home)
+
+\\	Re-retrieve file list.		<Plug>(voyager-reload)
+
++	Toggle hidden files.		<Plug>(voyager-toggle-hidden)
+
+					*g:voyager_no_default_keymappings*
+
+
+==============================================================================
+CONFIGURATION					*voyager-configuration*
+
+*g:voyager_show_hidden*	boolean	(default: 1)
+
+
+*g:voyager_keepalt*	boolean	(default: 0)
+*g:voyager_keepjumps*	boolean	(default: 0)
+
+
+*g:voyager_sort_maxdepth*	number	(default: 99)
+
+
+*g:voyager_nobeep*	boolean	(default: depends on 'belloff')
+
+
+
+==============================================================================
+STATUSLINE						*voyager-statusline*
+
+*g:voyager_statusline*	string	(default: "voyager#statusline#minimal#statusline")
+	Set empty string to disable.
+
+
+==============================================================================
+HIGHLIGHTS						*voyager-highlights*
+
+
+voyagerDirectory					*hl-voyagerDirectory*
+	Default: linked to |hl-Directory|
+
+
+voyagerNoFiles						*hl-voyagerNoFiles*
+	Default: linked to |hl-Comment|
+
+
+voyagerError						*hl-voyagerError*
+	Default: linked to |hl-WarningMsg|
+
+
+==============================================================================
+ABOUT							*voyager-about*
+
+|voyager| is developed by obcat and licensed under the MIT License.  Visit the
+project page for the latest version:
+
+	https://github.com/obcat/voyager.vim
+
+
+==============================================================================
+ vim:tw=78:ts=8:noet:ft=help:norl:
