@@ -6,7 +6,6 @@ CONTENTS
 	INTRO .................................... |voyager-intro|
 	KEYMAPPINGS .............................. |voyager-keymappings|
 	CONFIGURATION ............................ |voyager-configuration|
-	STATUSLINE ............................... |voyager-statusline|
 	HIGHLIGHTS ............................... |voyager-highlights|
 	ABOUT .................................... |voyager-about|
 
@@ -72,13 +71,6 @@ CONFIGURATION					*voyager-configuration*
 
 *g:voyager_nobeep*	boolean	(default: depends on 'belloff')
 
-
-
-==============================================================================
-STATUSLINE						*voyager-statusline*
-
-*g:voyager_statusline*	string	(default: "voyager#statusline#minimal#statusline")
-	Set empty string to disable.
 
 
 ==============================================================================

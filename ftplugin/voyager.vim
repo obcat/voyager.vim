@@ -30,9 +30,4 @@ if !get(g:, 'voyager_no_default_keymappings', 0)
   endif
 endif
 
-let s:statusline = get(g:, 'voyager_statusline', 'voyager#statusline#minimal#statusline')
-if !empty(s:statusline)
-  let &l:statusline = printf('%%!%s()', s:statusline)
-endif
-
 let b:did_ftplugin = 1
