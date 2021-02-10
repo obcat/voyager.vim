@@ -129,11 +129,16 @@ function! voyager#open() abort "{{{
   endif
   let line = getline('.')
   if (line is# s:msgs.nofiles) && get(b:, 'voyager_nofiles', 0)
+    \ || (line is# s:msgs.error) && get(b:, 'voyager_error', 0)
     call voyager#util#beep()
     return
   endif
   let file = curdir . line
-  exe s:keepalt s:keepjumps 'edit' fnameescape(file)
+  if isdirectory(file) || filereadable(file)
+    exe s:keepalt s:keepjumps 'edit' fnameescape(file)
+  else
+    call voyager#util#echoerr(printf('Error: Cannot open "%s".', file))
+  endif
 endfunction "}}}
 
 function! voyager#up() abort "{{{
