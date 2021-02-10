@@ -43,10 +43,9 @@ function! voyager#init() abort "{{{
 endfunction "}}}
 
 function s:set_filenames(dir) abort "{{{
-  let filenames = s:get_filenames(a:dir)
   " Prepend "silent" to suppress "--No lines in buffer--" message.
   silent keepjumps % delete _
-  call setline(1, filenames)
+  call setline(1, s:get_filenames(a:dir))
 endfunction "}}}
 
 " Returns a list of file names in specified directory.
@@ -70,8 +69,7 @@ function s:get_filenames(dir) abort "{{{
   let b:voyager_nofiles = 0
   call map(files, 's:add_isdir(v:val)')
   call sort(files, 's:compare')
-  let filenames = map(files, 'v:val.name . (v:val.isdir ? ''/'' : '''')')
-  return filenames
+  return map(files, 'v:val.name . (v:val.isdir ? ''/'' : '''')')
 endfunction "}}}
 
 " Set cursor on alternate file.
@@ -81,8 +79,7 @@ function s:focus_on_altfile() abort "{{{
     return
   endif
   let altfilename = fnamemodify(altfile, ':t')
-  let pattern = s:very_nomagic(altfilename)
-  call search(pattern, 'c')
+  call search(s:very_nomagic(altfilename), 'c')
 endfunction "}}}
 
 " Add new entry with "isidir" key. The value is:
@@ -160,8 +157,7 @@ function! voyager#up() abort "{{{
   endif
   exe s:keepalt s:keepjumps 'edit' fnameescape(parentdir)
   let prevdirname = fnamemodify(curdir, ':h:t')
-  let pattern = s:very_nomagic(prevdirname . '/')
-  call search(pattern, 'c')
+  call search(s:very_nomagic(prevdirname . '/'), 'c')
 endfunction "}}}
 
 function! voyager#reload() abort "{{{
@@ -169,8 +165,7 @@ function! voyager#reload() abort "{{{
   let b:voyager_initialized = 0
   call voyager#init()
   " Restore cursor position if possible.
-  let pattern = s:very_nomagic(filename)
-  call search(pattern, 'c')
+  call search(s:very_nomagic(filename), 'c')
 endfunction "}}}
 
 function! voyager#toggle_hidden() abort "{{{
