@@ -16,7 +16,8 @@ function! voyager#init() abort "{{{
   endif
   if get(b:, 'voyager_initialized', 0)
     if empty(getline('.'))
-      call voyager#util#echoerr('Type "r" or keys you mapped to reload.')
+      let b:voyager_initialized = 0
+      call voyager#init()
     endif
     return
   endif
