@@ -20,7 +20,7 @@ function! voyager#init() abort "{{{
   endif
   if get(b:, 'voyager_initialized', 0)
     if empty(getline('.'))
-      call voyager#util#echoerr('Type "\\" or keys you mapped to reload.')
+      call voyager#util#echoerr('Type "r" or keys you mapped to reload.')
     endif
     return
   endif
@@ -131,7 +131,7 @@ function! voyager#open() abort "{{{
   if empty(curdir)
     call voyager#util#echoerr(
       \ 'Internal error: Current directory not found.',
-      \ 'Try to type "\\" or keys you mapped to reload.',
+      \ 'Try to type "r" or keys you mapped to reload.',
       \ )
     return
   endif
@@ -149,7 +149,7 @@ function! voyager#up() abort "{{{
   if empty(curdir)
     call voyager#util#echoerr(
       \ 'Internal error: Current directory not found.',
-      \ 'Try to type "\\" or keys you mapped to reload.',
+      \ 'Try to type "r" or keys you mapped to reload.',
       \ )
     return
   endif
@@ -168,15 +168,6 @@ function! voyager#up() abort "{{{
   let prevdirname = curdir ->fnamemodify(':h:t')
   let pattern = s:very_nomagic(prevdirname . '/')
   call search(pattern, 'c')
-endfunction "}}}
-
-function! voyager#home() abort "{{{
-  let home = expand('~')
-  if !isdirectory(home)
-    call voyager#util#echoerr(printf('Unexpected error: "%s" is not directory.', home))
-    return
-  endif
-  exe s:keepalt s:keepjumps 'edit' fnameescape(home)
 endfunction "}}}
 
 function! voyager#reload() abort "{{{

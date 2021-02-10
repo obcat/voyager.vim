@@ -43,15 +43,13 @@ KEYMAPPINGS						*voyager-keymappings*
 
 lhs	function			rhs
 --------------------------------------------------------------------------
-<CR>	Open file or enter directory.	<Plug>(voyager-open)
+o	Open file or enter directory.	<Plug>(voyager-open)
 
--	Go up parent directory.		<Plug>(voyager-up)
+u	Go up parent directory.		<Plug>(voyager-up)
 
-~	Go to home directory.		<Plug>(voyager-home)
+r	Re-retrieve file list.		<Plug>(voyager-reload)
 
-\\	Re-retrieve file list.		<Plug>(voyager-reload)
-
-+	Toggle hidden files.		<Plug>(voyager-toggle-hidden)
+.	Toggle hidden files.		<Plug>(voyager-toggle-hidden)
 
 					*g:voyager_no_default_keymappings*
 
