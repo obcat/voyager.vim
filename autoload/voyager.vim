@@ -2,14 +2,10 @@
 " Maintainer: obcat <obcat@icloud.com>
 " License:    MIT License
 
-let s:keepalt = get(g:, 'voyager_keepalt', 0)
-  \ ? 'keepalt'
-  \ : ''
-let s:keepjumps = get(g:, 'voyager_keepjumps', 0)
-  \ ? 'keepjumps'
-  \ : ''
+let s:keepalt   = get(g:, 'voyager_keepalt',   0) ? 'keepalt'   : ''
+let s:keepjumps = get(g:, 'voyager_keepjumps', 0) ? 'keepjumps' : ''
 let s:msgs = #{
-  \ error: '(failed to retrieve file list)',
+  \ error:   '(failed to retrieve file list)',
   \ nofiles: '(no files)',
   \ }
 
@@ -47,7 +43,7 @@ endfunction "}}}
 
 function s:set_filenames(dir) abort "{{{
   let filenames = s:get_filenames(a:dir)
-  " Prepend ":silent" command to suppress "--No lines in buffer--" message.
+  " Prepend "silent" to suppress "--No lines in buffer--" message.
   silent keepjumps % delete _
   call setline(1, filenames)
 endfunction "}}}
@@ -57,9 +53,7 @@ function s:get_filenames(dir) abort "{{{
   let show_hidden = get(b:, 'voyager_show_hidden',
     \               get(g:, 'voyager_show_hidden',
     \ 1))
-  let Filter = show_hidden
-    \ ? 1
-    \ : {file -> file.name !~ '^\.'}
+  let Filter = show_hidden ? 1 : {file -> file.name !~ '^\.'}
   try
     let files = readdirex(a:dir, Filter, #{sort: 'none'})
   catch
@@ -73,9 +67,9 @@ function s:get_filenames(dir) abort "{{{
     return [s:msgs.nofiles]
   endif
   let b:voyager_nofiles = 0
-  call map(files, {_, file -> s:add_isdir(file)})
-  call sort(files, function('s:compare'))
-  let filenames = map(files, {_, file -> file.name . (file.isdir ? '/' : '')})
+  call map(files, 's:add_isdir(v:val)')
+  call sort(files, 's:compare')
+  let filenames = map(files, 'v:val.name . (v:val.isdir ? ''/'' : '''')')
   return filenames
 endfunction "}}}
 
@@ -85,7 +79,7 @@ function s:focus_on_altfile() abort "{{{
   if empty(altfile) || isdirectory(altfile)
     return
   endif
-  let altfilename = altfile ->fnamemodify(':t')
+  let altfilename = fnamemodify(altfile, ':t')
   let pattern = s:very_nomagic(altfilename)
   call search(pattern, 'c')
 endfunction "}}}
@@ -158,14 +152,13 @@ function! voyager#up() abort "{{{
     return
   endif
   " NOTE: "curdir" has a path separator at the end.
-  let parentdir = curdir ->fnamemodify(':h:h')
+  let parentdir = fnamemodify(curdir, ':h:h')
   if !isdirectory(parentdir)
-    call voyager#util#echoerr(printf('Unexpected error: "%s" is not directory.', parentdir))
+    call voyager#util#echoerr(printf('Error: "%s" is not directory.', parentdir))
     return
   endif
   exe s:keepalt s:keepjumps 'edit' fnameescape(parentdir)
-  " Set cursor on previous directory.
-  let prevdirname = curdir ->fnamemodify(':h:t')
+  let prevdirname = fnamemodify(curdir, ':h:t')
   let pattern = s:very_nomagic(prevdirname . '/')
   call search(pattern, 'c')
 endfunction "}}}
@@ -194,6 +187,6 @@ function! voyager#_define_syntax() abort "{{{
   exe 'syntax match voyagerNoFiles' delimiter . s:very_nomagic(s:msgs.nofiles) . delimiter
   exe 'syntax match voyagerError'   delimiter . s:very_nomagic(s:msgs.error)   . delimiter
   hi! default link voyagerDirectory Directory
-  hi! default link voyagerNoFiles Comment
-  hi! default link voyagerError WarningMsg
+  hi! default link voyagerNoFiles   Comment
+  hi! default link voyagerError     WarningMsg
 endfunction "}}}

@@ -25,12 +25,12 @@ To open a voyager buffer, i.e. file explorer, run a command that starts editing 
 **Examples:**
 
 * Open in the current window.
-    ```vim
+    ```
     edit {directory}
     ```
 
 * Open in the vertically splited window.
-    ```vim
+    ```
     vsplit {directory}
     ```
 
