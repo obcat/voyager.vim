@@ -85,7 +85,7 @@ endfunction "}}}
 "   * 0 if not.
 function s:add_isdir(file) abort "{{{
   let file = deepcopy(a:file)
-  let file.isdir = (file.type is# 'dir') || (file.type is# 'linkd')
+  let file.isdir = file.type is# 'dir' || file.type is# 'linkd'
   return file
 endfunction "}}}
 
@@ -106,10 +106,10 @@ function s:compare(file1, file2) abort "{{{
       continue
     endif
     " Dictionary order
-    return (n1[i] > n2[i]) ? +1 : -1
+    return n1[i] > n2[i] ? +1 : -1
   endfor
   " Shorter first
-  return (l1 < l2) ? -1 : +1
+  return l1 < l2 ? -1 : +1
 endfunction "}}}
 
 function s:very_nomagic(text) abort "{{{
@@ -126,8 +126,8 @@ function! voyager#open() abort "{{{
     return
   endif
   let line = getline('.')
-  if (line is# s:msgs.nofiles) && get(b:, 'voyager_nofiles', 0)
-    \ || (line is# s:msgs.error) && get(b:, 'voyager_error', 0)
+  if line is# s:msgs.nofiles && get(b:, 'voyager_nofiles', 0)
+    \ || line is# s:msgs.error && get(b:, 'voyager_error', 0)
     call voyager#util#beep()
     return
   endif
@@ -135,7 +135,7 @@ function! voyager#open() abort "{{{
   if isdirectory(file) || filereadable(file)
     let keepalt   = get(g:, 'voyager_keepalt',   0) ? 'keepalt'   : ''
     let keepjumps = get(g:, 'voyager_keepjumps', 0) ? 'keepjumps' : ''
-    exe keepalt keepjumps 'edit' fnameescape(file)
+    execute keepalt keepjumps 'edit' fnameescape(file)
   else
     call voyager#util#echoerr(printf('Error: Cannot open "%s".', file))
   endif
@@ -162,7 +162,7 @@ function! voyager#up() abort "{{{
   endif
   let keepalt   = get(g:, 'voyager_keepalt',   0) ? 'keepalt'   : ''
   let keepjumps = get(g:, 'voyager_keepjumps', 0) ? 'keepjumps' : ''
-  exe keepalt keepjumps 'edit' fnameescape(parentdir)
+  execute keepalt keepjumps 'edit' fnameescape(parentdir)
   let prevdirname = fnamemodify(curdir, ':h:t')
   call search(s:very_nomagic(prevdirname . '/'), 'c')
 endfunction "}}}
@@ -187,9 +187,9 @@ endfunction "}}}
 function! voyager#_define_syntax() abort "{{{
   let delimiter = '='
   syntax match voyagerDirectory =^.\+/$=
-  exe 'syntax match voyagerNoFiles' delimiter . s:very_nomagic(s:msgs.nofiles) . delimiter
-  exe 'syntax match voyagerError'   delimiter . s:very_nomagic(s:msgs.error)   . delimiter
-  hi! default link voyagerDirectory Directory
-  hi! default link voyagerNoFiles   Comment
-  hi! default link voyagerError     WarningMsg
+  execute 'syntax match voyagerNoFiles' delimiter . s:very_nomagic(s:msgs.nofiles) . delimiter
+  execute 'syntax match voyagerError'   delimiter . s:very_nomagic(s:msgs.error)   . delimiter
+  highlight default link voyagerDirectory Directory
+  highlight default link voyagerNoFiles   Comment
+  highlight default link voyagerError     WarningMsg
 endfunction "}}}

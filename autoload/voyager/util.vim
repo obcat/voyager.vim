@@ -14,6 +14,6 @@ function! voyager#util#beep() abort
   let belloff = split(&belloff, ',')
   let default = index(belloff, 'error') >= 0
   if !get(g:, 'voyager_nobeep', default)
-    exe 'normal! "\<ESC>"'
+    execute 'normal! "\<ESC>"'
   endif
 endfunction
