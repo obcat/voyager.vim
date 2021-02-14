@@ -43,9 +43,9 @@ KEYMAPPINGS						*voyager-keymappings*
 
 lhs	function			rhs
 --------------------------------------------------------------------------
-o	Open file or enter directory.	<Plug>(voyager-open)
+<CR>	Open file or enter directory.	<Plug>(voyager-open)
 
-u	Go up parent directory.		<Plug>(voyager-up)
+-	Go up parent directory.		<Plug>(voyager-up)
 
 r	Re-retrieve file list.		<Plug>(voyager-reload)
 
