@@ -2,8 +2,6 @@
 " Maintainer: obcat <obcat@icloud.com>
 " License:    MIT License
 
-let s:keepalt   = get(g:, 'voyager_keepalt',   0) ? 'keepalt'   : ''
-let s:keepjumps = get(g:, 'voyager_keepjumps', 0) ? 'keepjumps' : ''
 let s:msgs = #{
   \ error:   '(failed to retrieve file list)',
   \ nofiles: '(no files)',
@@ -135,7 +133,9 @@ function! voyager#open() abort "{{{
   endif
   let file = curdir . line
   if isdirectory(file) || filereadable(file)
-    exe s:keepalt s:keepjumps 'edit' fnameescape(file)
+    let keepalt   = get(g:, 'voyager_keepalt',   0) ? 'keepalt'   : ''
+    let keepjumps = get(g:, 'voyager_keepjumps', 0) ? 'keepjumps' : ''
+    exe keepalt keepjumps 'edit' fnameescape(file)
   else
     call voyager#util#echoerr(printf('Error: Cannot open "%s".', file))
   endif
@@ -160,7 +160,9 @@ function! voyager#up() abort "{{{
     call voyager#util#echoerr(printf('Error: "%s" is not directory.', parentdir))
     return
   endif
-  exe s:keepalt s:keepjumps 'edit' fnameescape(parentdir)
+  let keepalt   = get(g:, 'voyager_keepalt',   0) ? 'keepalt'   : ''
+  let keepjumps = get(g:, 'voyager_keepjumps', 0) ? 'keepjumps' : ''
+  exe keepalt keepjumps 'edit' fnameescape(parentdir)
   let prevdirname = fnamemodify(curdir, ':h:t')
   call search(s:very_nomagic(prevdirname . '/'), 'c')
 endfunction "}}}
