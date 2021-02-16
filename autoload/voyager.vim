@@ -29,6 +29,7 @@ function! voyager#init() abort "{{{
   setlocal noswapfile
 
   setlocal nowrap
+  setlocal readonly
   setlocal matchpairs=
   setlocal filetype=voyager
 
