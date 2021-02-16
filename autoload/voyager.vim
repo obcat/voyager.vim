@@ -107,7 +107,7 @@ function s:compare(file1, file2) abort "{{{
       continue
     endif
     " Dictionary order
-    return n1[i] > n2[i] ? +1 : -1
+    return n1[i] < n2[i] ? -1 : +1
   endfor
   " Shorter first
   return l1 < l2 ? -1 : +1
