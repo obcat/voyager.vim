@@ -2,18 +2,14 @@
 " Maintainer: obcat <obcat@icloud.com>
 " License:    MIT License
 
-function! voyager#util#echoerr(...) abort
-  echohl WarningMsg
+function voyager#util#echoerr(...) abort
+  echohl ErrorMsg
   for msg in a:000
     echomsg printf('[voyager] %s', msg)
   endfor
   echohl None
 endfunction
 
-function! voyager#util#beep() abort
-  let belloff = split(&belloff, ',')
-  let default = index(belloff, 'error') >= 0
-  if !get(g:, 'voyager_nobeep', default)
-    execute 'normal! "\<ESC>"'
-  endif
+function voyager#util#beep() abort
+  execute 'normal! "\<ESC>"'
 endfunction

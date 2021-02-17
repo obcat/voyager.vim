@@ -5,17 +5,20 @@
 if exists('g:loaded_voyager')
   finish
 endif
+let g:loaded_voyager = 1
 
-function! s:hijack_netrw() abort
-  if exists('#FileExplorer')
-    autocmd! FileExplorer
-  endif
-endfunction
-
-augroup _voyager_
+augroup voyager
   autocmd!
-  autocmd VimEnter * call s:hijack_netrw()
-  autocmd BufEnter * call voyager#init()
+  autocmd BufEnter * call s:on_bufenter()
+  autocmd VimEnter *
+    \ if exists('#FileExplorer')
+    \| autocmd! FileExplorer
+    \|endif
 augroup END
 
-let g:loaded_voyager = 1
+function s:on_bufenter() abort
+  let file = expand('%:p')
+  if isdirectory(file)
+    call voyager#init(file)
+  endif
+endfunction

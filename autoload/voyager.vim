@@ -2,195 +2,59 @@
 " Maintainer: obcat <obcat@icloud.com>
 " License:    MIT License
 
-let s:msgs = #{
-  \ error:   '(failed to retrieve file list)',
+let g:voyager#messages = #{
+  \ error:   '(error)',
   \ nofiles: '(no files)',
   \ }
 
-function! voyager#init() abort "{{{
-  let file = expand('%:p')
-  if !isdirectory(file)
+function voyager#init(dir) abort
+  if get(b:, 'voyager_initialized', 0) && !empty(getline('.'))
     return
   endif
-  if get(b:, 'voyager_initialized', 0)
-    if empty(getline('.'))
-      let b:voyager_initialized = 0
-      call voyager#init()
-    endif
-    return
-  endif
-  " NOTE: "curdir" has a path separator at the end.
-  let curdir = file
-  let b:voyager_curdir = curdir
 
-  " See ":help special-buffers".
-  setlocal buftype=nowrite
-  setlocal bufhidden=delete
-  setlocal noswapfile
-
-  setlocal nowrap
-  setlocal readonly
-  setlocal matchpairs=
+  " This will source "ftplugin/voyager.vim" and "syntax/voyager.vim."
   setlocal filetype=voyager
 
   setlocal modifiable
-  call s:set_filenames(curdir)
+  call s:list_contents(a:dir)
   setlocal nomodifiable
 
-  call s:focus_on_altfile()
+  if b:voyager_state is 'files'
+    let altfile = expand('#:p')
+    if !empty(altfile) && !isdirectory(altfile)
+      call voyager#set_cursor(fnamemodify(altfile, ':t'))
+    endif
+  endif
+
+  let b:voyager_curdir = a:dir
   let b:voyager_initialized = 1
-endfunction "}}}
+endfunction
 
-function s:set_filenames(dir) abort "{{{
-  " Prepend "silent" to suppress "--No lines in buffer--" message.
-  silent keepjumps % delete _
-  call setline(1, s:get_filenames(a:dir))
-endfunction "}}}
+function voyager#set_cursor(text) abort
+  let pattern = printf('\V\^%s\$', escape(a:text, '\'))
+  call search(pattern, 'c')
+endfunction
 
-" Returns a list of file names in specified directory.
-function s:get_filenames(dir) abort "{{{
-  let show_hidden = get(b:, 'voyager_show_hidden',
-    \               get(g:, 'voyager_show_hidden',
-    \ 1))
-  let Filter = show_hidden ? 1 : {file -> file.name !~ '^\.'}
+function s:list_contents(dir) abort
   try
-    let files = readdirex(a:dir, Filter, #{sort: 'none'})
+    let filenames = voyager#file#get_filenames(a:dir)
   catch
     call voyager#util#echoerr(v:exception)
-    let b:voyager_error = 1
-    return [s:msgs.error]
+    call s:replace_all_lines([g:voyager#messages.error])
+    let b:voyager_state = 'message'
+    return
   endtry
-  let b:voyager_error = 0
-  if empty(files)
-    let b:voyager_nofiles = 1
-    return [s:msgs.nofiles]
-  endif
-  let b:voyager_nofiles = 0
-  call map(files, 's:add_isdir(v:val)')
-  call sort(files, 's:compare')
-  return map(files, 'v:val.name . (v:val.isdir ? ''/'' : '''')')
-endfunction "}}}
-
-" Set cursor on alternate file.
-function s:focus_on_altfile() abort "{{{
-  let altfile = expand('#:p')
-  if empty(altfile) || isdirectory(altfile)
+  if empty(filenames)
+    call s:replace_all_lines([g:voyager#messages.nofiles])
+    let b:voyager_state = 'message'
     return
   endif
-  let altfilename = fnamemodify(altfile, ':t')
-  call search(s:very_nomagic(altfilename), 'c')
-endfunction "}}}
+  let b:voyager_state = 'files'
+  call s:replace_all_lines(filenames)
+endfunction
 
-" Add new entry with "isidir" key. The value is:
-"   * 1 if specified file is directory or symlink to directory,
-"   * 0 if not.
-function s:add_isdir(file) abort "{{{
-  let file = deepcopy(a:file)
-  let file.isdir = file.type is# 'dir' || file.type is# 'linkd'
-  return file
-endfunction "}}}
-
-function s:compare(file1, file2) abort "{{{
-  let f1 = a:file1
-  let f2 = a:file2
-  if f1.isdir != f2.isdir
-    " Directory first
-    return f1.isdir ? -1 : +1
-  endif
-  let n1 = f1.name
-  let n2 = f2.name
-  let l1 = len(n1)
-  let l2 = len(n2)
-  let maxdepth = get(g:, 'voyager_sort_maxdepth', 99)
-  for i in range(0, min([l1, l2, maxdepth]) - 1)
-    if n1[i] is# n2[i]
-      continue
-    endif
-    " Dictionary order
-    return n1[i] < n2[i] ? -1 : +1
-  endfor
-  " Shorter first
-  return l1 < l2 ? -1 : +1
-endfunction "}}}
-
-function s:very_nomagic(text) abort "{{{
-  return printf('\V\^%s\$', escape(a:text, '\'))
-endfunction "}}}
-
-function! voyager#open() abort "{{{
-  let curdir = get(b:, 'voyager_curdir', '')
-  if empty(curdir)
-    call voyager#util#echoerr(
-      \ 'Internal error: Current directory not found.',
-      \ 'Try to type "r" or keys you mapped to reload.',
-      \ )
-    return
-  endif
-  let line = getline('.')
-  if line is# s:msgs.nofiles && get(b:, 'voyager_nofiles', 0)
-    \ || line is# s:msgs.error && get(b:, 'voyager_error', 0)
-    call voyager#util#beep()
-    return
-  endif
-  let file = curdir . line
-  if isdirectory(file) || filereadable(file)
-    let keepalt   = get(g:, 'voyager_keepalt',   0) ? 'keepalt'   : ''
-    let keepjumps = get(g:, 'voyager_keepjumps', 0) ? 'keepjumps' : ''
-    execute keepalt keepjumps 'edit' fnameescape(file)
-  else
-    call voyager#util#echoerr(printf('Error: Cannot open "%s".', file))
-  endif
-endfunction "}}}
-
-function! voyager#up() abort "{{{
-  let curdir = get(b:, 'voyager_curdir', '')
-  if empty(curdir)
-    call voyager#util#echoerr(
-      \ 'Internal error: Current directory not found.',
-      \ 'Try to type "r" or keys you mapped to reload.',
-      \ )
-    return
-  endif
-  if curdir is# '/'
-    call voyager#util#beep()
-    return
-  endif
-  " NOTE: "curdir" has a path separator at the end.
-  let parentdir = fnamemodify(curdir, ':h:h')
-  if !isdirectory(parentdir)
-    call voyager#util#echoerr(printf('Error: "%s" is not directory.', parentdir))
-    return
-  endif
-  let keepalt   = get(g:, 'voyager_keepalt',   0) ? 'keepalt'   : ''
-  let keepjumps = get(g:, 'voyager_keepjumps', 0) ? 'keepjumps' : ''
-  execute keepalt keepjumps 'edit' fnameescape(parentdir)
-  let prevdirname = fnamemodify(curdir, ':h:t')
-  call search(s:very_nomagic(prevdirname . '/'), 'c')
-endfunction "}}}
-
-function! voyager#reload() abort "{{{
-  let filename = getline('.')
-  let b:voyager_initialized = 0
-  call voyager#init()
-  " Restore cursor position if possible.
-  call search(s:very_nomagic(filename), 'c')
-endfunction "}}}
-
-function! voyager#toggle_hidden() abort "{{{
-  let show_hidden = get(b:, 'voyager_show_hidden',
-    \               get(g:, 'voyager_show_hidden',
-    \ 1))
-  let b:voyager_show_hidden = !show_hidden
-  call voyager#reload()
-endfunction "}}}
-
-" This is called from syntax/voyager.vim.
-function! voyager#_define_syntax() abort "{{{
-  let delimiter = '='
-  syntax match voyagerDirectory =^.\+/$=
-  execute 'syntax match voyagerNoFiles' delimiter . s:very_nomagic(s:msgs.nofiles) . delimiter
-  execute 'syntax match voyagerError'   delimiter . s:very_nomagic(s:msgs.error)   . delimiter
-  highlight default link voyagerDirectory Directory
-  highlight default link voyagerNoFiles   Comment
-  highlight default link voyagerError     WarningMsg
-endfunction "}}}
+function s:replace_all_lines(lines) abort
+  " Prepend "silent" to suppress "--No lines in buffer--" message.
+  silent keepjumps % delete _
+  call setline(1, a:lines)
+endfunction

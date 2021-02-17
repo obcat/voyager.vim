@@ -7,10 +7,18 @@ if exists('b:did_ftplugin')
 endif
 let b:did_ftplugin = 1
 
-nnoremap <buffer> <Plug>(voyager-open)          <Cmd>call voyager#open()<CR>
-nnoremap <buffer> <Plug>(voyager-up)            <Cmd>call voyager#up()<CR>
-nnoremap <buffer> <Plug>(voyager-reload)        <Cmd>call voyager#reload()<CR>
-nnoremap <buffer> <Plug>(voyager-toggle-hidden) <Cmd>call voyager#toggle_hidden()<CR>
+" See ":help special-buffers".
+setlocal buftype=nowrite
+setlocal bufhidden=delete
+setlocal noswapfile
+
+setlocal nowrap
+setlocal matchpairs=
+
+nnoremap <buffer> <Plug>(voyager-open)          <Cmd>call voyager#mapping#open()<CR>
+nnoremap <buffer> <Plug>(voyager-up)            <Cmd>call voyager#mapping#up()<CR>
+nnoremap <buffer> <Plug>(voyager-reload)        <Cmd>call voyager#mapping#reload()<CR>
+nnoremap <buffer> <Plug>(voyager-toggle-hidden) <Cmd>call voyager#mapping#toggle_hidden()<CR>
 
 if get(g:, 'voyager_no_default_keymappings', 0)
   finish
