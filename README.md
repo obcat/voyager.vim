@@ -1,37 +1,25 @@
 # 🛰 voyager.vim
 
-Minimal file exploror.
+Minimal file exploror for Vim.
 
-## Under construction
+⚠️ **UNDER CONSTRUCTION**
 
-As of now: 
-
-* Vim only
-* Unix only
-
+Currently, only for \*nix. Windows is not supported.
 
 ## Getting started
 
-Add the following lines to your vimrc in order to disable a conflicting plugin bundled in Vim.
-```vim
-let g:loaded_netrw             = 1
-let g:loaded_netrwFileHandlers = 1
-let g:loaded_netrwPlugin       = 1
-let g:loaded_netrwSettings     = 1
-```
-
-To open a voyager buffer, i.e. file explorer, run a command that starts editing files with the path to a directory you would like to open.
+To start a file explorer, run a command that starts editing files, giving the path to the directory you want to open.
 
 **Examples:**
 
-* Open in the current window.
+* Open current directory in the current window.
     ```
-    edit {directory}
+    edit .
     ```
 
-* Open in the vertically splited window.
+* Open parent directory of current buffer in the vertical split window.
     ```
-    vsplit {directory}
+    vsplit %:h
     ```
 
 ## Special thanks

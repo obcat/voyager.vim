@@ -13,27 +13,19 @@ CONTENTS
 ==============================================================================
 INTRO							*voyager-intro*
 
-*voyager* is a filer plugin for Vim.
+*voyager* is a file explorer for Vim.
 
 
 ==============================================================================
 GETTING STARTED					*voyager-getting-started*
 
-Add the following lines to your |vimrc| to disable a conflicting plugin:
->
-	let g:loaded_netrw             = 1
-	let g:loaded_netrwFileHandlers = 1
-	let g:loaded_netrwPlugin       = 1
-	let g:loaded_netrwSettings     = 1
-<
+To start a file explorer, run a command that starts editing files, giving the
+path to the directory you want to open.
 
-To open a |voyager| buffer, i.e. file explorer, run a command that starts
-editing files with the path to a {directory} you would like to open. Examples:
-
-Open in the current window: >
+Open current directory in the current window: >
 	edit {directory}
 <
-Open in the vertically splited window: >
+Open parent directory of current buffer in the vertical split window: >
 	vsplit {directory}
 <
 
@@ -84,7 +76,7 @@ voyagerNoFiles						*hl-voyagerNoFiles*
 
 
 voyagerError						*hl-voyagerError*
-	Default: linked to |hl-WarningMsg|
+	Default: linked to |hl-ErrorMsg|
 
 
 ==============================================================================
