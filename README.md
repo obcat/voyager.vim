@@ -1,23 +1,28 @@
 # 🛰 voyager.vim
 
-Minimal file exploror for Vim.
+Minimal file exploror written in Vim9 script
 
-⚠️ **UNDER CONSTRUCTION**
+⚠️ **LIMITATIONS**
 
-Currently, only for \*nix. Windows is not supported.
+* This plugin is written in Vim9 script, but the specification of Vim9 is not
+yet stable. I guarantee this works fine on the Vim that I use, but it is also
+not stable. In other words, you shouldn't use this plugin.
+
+* Currently, only for \*nix. Windows is not supported.
 
 ## Getting started
 
-To start a file explorer, run a command that starts editing files, giving the path to the directory you want to open.
+To start a file explorer, run a command that starts editing files, giving the
+path to the directory you want to open.
 
 **Examples:**
 
-* Open current directory in the current window.
+* Open the current directory in the current window.
     ```
     edit .
     ```
 
-* Open parent directory of current buffer in the vertical split window.
+* Open the parent directory of current buffer in the vertical split window.
     ```
     vsplit %:h
     ```

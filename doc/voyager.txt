@@ -22,10 +22,10 @@ GETTING STARTED					*voyager-getting-started*
 To start a file explorer, run a command that starts editing files, giving the
 path to the directory you want to open.
 
-Open current directory in the current window: >
+Open the current directory in the current window: >
 	edit {directory}
 <
-Open parent directory of current buffer in the vertical split window: >
+Open the parent directory of current buffer in the vertical split window: >
 	vsplit {directory}
 <
 
@@ -49,17 +49,17 @@ r	Re-retrieve file list.		<Plug>(voyager-reload)
 ==============================================================================
 CONFIGURATION					*voyager-configuration*
 
-*g:voyager_show_hidden*	boolean	(default: 1)
+*g:voyager_show_hidden*	bool	(default: true)
 
 
-*g:voyager_keepalt*	boolean	(default: 0)
-*g:voyager_keepjumps*	boolean	(default: 0)
+*g:voyager_keepalt*	bool	(default: false)
+*g:voyager_keepjumps*	bool	(default: false)
 
 
 *g:voyager_sort_maxdepth*	number	(default: 99)
 
 
-*g:voyager_nobeep*	boolean	(default: depends on 'belloff')
+*g:voyager_nobeep*	bool	(default: `&belloff =~ 'error'`)
 
 
 
