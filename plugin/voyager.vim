@@ -10,14 +10,14 @@ g:loaded_voyager = true
 
 augroup voyager
   autocmd!
-  autocmd BufEnter * OnBufenter()
+  autocmd BufEnter * OnBufEnter()
   autocmd VimEnter *
     \ if exists('#FileExplorer')
     |   autocmd! FileExplorer
     | endif
 augroup END
 
-def OnBufenter()
+def OnBufEnter()
   const file = expand('%:p')
   if isdirectory(file)
     voyager#init(file)

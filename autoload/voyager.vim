@@ -33,7 +33,7 @@ def voyager#set_cursor(text: string)
 enddef
 
 def ListContents(dir: string)
-  var filenames = ['']
+  var filenames: list<string>
   try
     filenames = voyager#file#get_filenames(dir)
   catch
@@ -51,12 +51,12 @@ def ListContents(dir: string)
     b:voyager_state = 'message'
     return
   endif
-  b:voyager_state = 'files'
   ReplaceAllLines(filenames)
+  b:voyager_state = 'files'
 enddef
 
 def ReplaceAllLines(lines: list<string>)
-  # Prepend "silent" to suppress "--No lines in buffer--" message.
+  # NOTE: "silent" is used to suppress "--No lines in buffer--" message.
   silent keepjumps :% delete _
   setline(1, lines)
 enddef
