@@ -22,4 +22,11 @@ function s:suite.toggle_hidden()
     \ 'not_hiddenA',
     \ 'not_hiddenB',
     \ ])
+  normal .
+  call s:assert.equals(getline(1, '$'), [
+    \ '.hiddenA',
+    \ '.hiddenB',
+    \ 'not_hiddenA',
+    \ 'not_hiddenB',
+    \ ])
 endfunction
