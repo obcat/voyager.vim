@@ -1,15 +1,16 @@
-" voyager - Minimal file explorer
-" Maintainer: obcat <obcat@icloud.com>
-" License:    MIT License
+vim9script
+# voyager - Minimal file explorer
+# Maintainer: obcat <obcat@icloud.com>
+# License:    MIT License
 
-function voyager#util#echoerr(...) abort
+def voyager#util#echoerr(...msgs: list<string>)
   echohl ErrorMsg
-  for msg in a:000
+  for msg in msgs
     echomsg printf('[voyager] %s', msg)
   endfor
   echohl None
-endfunction
+enddef
 
-function voyager#util#beep() abort
+def voyager#util#beep()
   execute 'normal! "\<ESC>"'
-endfunction
+enddef

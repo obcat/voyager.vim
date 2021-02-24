@@ -1,60 +1,61 @@
-" voyager - Minimal file explorer
-" Maintainer: obcat <obcat@icloud.com>
-" License:    MIT License
+vim9script
+# voyager - Minimal file explorer
+# Maintainer: obcat <obcat@icloud.com>
+# License:    MIT License
 
-let g:voyager#messages = #{
-  \ error:   '(error)',
-  \ nofiles: '(no files)',
-  \ }
+g:voyager#messages = {
+  error:   '(error)',
+  nofiles: '(no files)',
+}
 
-function voyager#init(dir) abort
-  if get(b:, 'voyager_initialized', 0) && !empty(getline('.'))
+def voyager#init(dir: string)
+  if get(b:, 'voyager_initialized', false) && !empty(getline('.'))
     return
   endif
 
-  " This will source "ftplugin/voyager.vim" and "syntax/voyager.vim."
+  # This will source "ftplugin/voyager.vim" and "syntax/voyager.vim."
   setlocal filetype=voyager
 
   setlocal modifiable
-  call s:list_contents(a:dir)
+  ListContents(dir)
   setlocal nomodifiable
 
   if b:voyager_state is 'files'
-    let altfile = expand('#:p')
+    const altfile = expand('#:p')
     if !empty(altfile) && !isdirectory(altfile)
-      call voyager#set_cursor(fnamemodify(altfile, ':t'))
+      voyager#set_cursor(fnamemodify(altfile, ':t'))
     endif
   endif
+  b:voyager_curdir = dir
+  b:voyager_initialized = true
+enddef
 
-  let b:voyager_curdir = a:dir
-  let b:voyager_initialized = 1
-endfunction
+def voyager#set_cursor(text: string)
+  const pattern = printf('\V\^%s\$', escape(text, '\'))
+  search(pattern, 'c')
+enddef
 
-function voyager#set_cursor(text) abort
-  let pattern = printf('\V\^%s\$', escape(a:text, '\'))
-  call search(pattern, 'c')
-endfunction
-
-function s:list_contents(dir) abort
+def ListContents(dir: string)
+  var filenames = ['']
   try
-    let filenames = voyager#file#get_filenames(a:dir)
+    filenames = voyager#file#get_filenames(dir)
   catch
-    call voyager#util#echoerr(v:exception)
-    call s:replace_all_lines([g:voyager#messages.error])
-    let b:voyager_state = 'message'
+    voyager#util#echoerr(v:exception)
+    ReplaceAllLines([g:voyager#messages.error])
+    b:voyager_state = 'message'
     return
   endtry
   if empty(filenames)
-    call s:replace_all_lines([g:voyager#messages.nofiles])
-    let b:voyager_state = 'message'
+    ReplaceAllLines([g:voyager#messages.nofiles])
+    b:voyager_state = 'message'
     return
   endif
-  let b:voyager_state = 'files'
-  call s:replace_all_lines(filenames)
-endfunction
+  b:voyager_state = 'files'
+  ReplaceAllLines(filenames)
+enddef
 
-function s:replace_all_lines(lines) abort
-  " Prepend "silent" to suppress "--No lines in buffer--" message.
-  silent keepjumps % delete _
-  call setline(1, a:lines)
-endfunction
+def ReplaceAllLines(lines: list<string>)
+  # Prepend "silent" to suppress "--No lines in buffer--" message.
+  silent keepjumps :% delete _
+  setline(1, lines)
+enddef

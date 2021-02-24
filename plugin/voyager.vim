@@ -1,24 +1,25 @@
-" voyager - Minimal file explorer
-" Maintainer: obcat <obcat@icloud.com>
-" License:    MIT License
+vim9script
+# voyager - Minimal file explorer
+# Maintainer: obcat <obcat@icloud.com>
+# License:    MIT License
 
 if exists('g:loaded_voyager')
   finish
 endif
-let g:loaded_voyager = 1
+g:loaded_voyager = true
 
 augroup voyager
   autocmd!
-  autocmd BufEnter * call s:on_bufenter()
+  autocmd BufEnter * OnBufenter()
   autocmd VimEnter *
     \ if exists('#FileExplorer')
-    \| autocmd! FileExplorer
-    \|endif
+    |   autocmd! FileExplorer
+    | endif
 augroup END
 
-function s:on_bufenter() abort
-  let file = expand('%:p')
+def OnBufenter()
+  const file = expand('%:p')
   if isdirectory(file)
-    call voyager#init(file)
+    voyager#init(file)
   endif
-endfunction
+enddef
