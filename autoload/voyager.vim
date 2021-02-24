@@ -37,7 +37,11 @@ def ListContents(dir: string)
   try
     filenames = voyager#file#get_filenames(dir)
   catch
-    voyager#util#echoerr(v:exception)
+    # HACK: Avoid error message from being cleared.
+    augroup voyager-echoerr
+      autocmd!
+      autocmd SafeStateAgain * ++once voyager#util#echoerr(v:exception)
+    augroup END
     ReplaceAllLines([messages.error])
     b:voyager_state = 'message'
     return
