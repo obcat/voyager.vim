@@ -3,10 +3,7 @@ vim9script
 # Maintainer: obcat <obcat@icloud.com>
 # License:    MIT License
 
-g:voyager#messages = {
-  error:   '(error)',
-  nofiles: '(no files)',
-}
+import messages from '../import/voyager/messages.vim'
 
 def voyager#init(dir: string)
   if get(b:, 'voyager_initialized', false) && !empty(getline('.'))
@@ -41,12 +38,12 @@ def ListContents(dir: string)
     filenames = voyager#file#get_filenames(dir)
   catch
     voyager#util#echoerr(v:exception)
-    ReplaceAllLines([g:voyager#messages.error])
+    ReplaceAllLines([messages.error])
     b:voyager_state = 'message'
     return
   endtry
   if empty(filenames)
-    ReplaceAllLines([g:voyager#messages.nofiles])
+    ReplaceAllLines([messages.nofiles])
     b:voyager_state = 'message'
     return
   endif

@@ -8,9 +8,11 @@ if exists('b:current_syntax')
 endif
 b:current_syntax = 'voyager'
 
+import messages from '../import/voyager/messages.vim'
+
 syntax match voyagerDirectory =^.\+/$=
-execute 'syntax match voyagerNoFiles' '=' .. g:voyager#messages.nofiles .. '='
-execute 'syntax match voyagerError'   '=' .. g:voyager#messages.error   .. '='
+execute 'syntax match voyagerNoFiles' '=' .. messages.nofiles .. '='
+execute 'syntax match voyagerError'   '=' .. messages.error   .. '='
 highlight default link voyagerDirectory Directory
 highlight default link voyagerNoFiles   Comment
 highlight default link voyagerError     ErrorMsg
