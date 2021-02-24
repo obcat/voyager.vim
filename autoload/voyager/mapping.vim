@@ -9,13 +9,13 @@ def voyager#mapping#open()
     return
   endif
   const file = b:voyager_curdir .. getline('.')
-  if isdirectory(file) || filereadable(file)
-    const keepalt   = get(g:, 'voyager_keepalt',   false) ? 'keepalt'   : ''
-    const keepjumps = get(g:, 'voyager_keepjumps', false) ? 'keepjumps' : ''
-    execute keepalt keepjumps 'edit' fnameescape(file)
-  else
+  const filereadable = filereadable(file)
+  const isdirectory  = isdirectory(file)
+  if !filereadable && !isdirectory
     voyager#util#echoerr(printf('Error: Cannot open "%s".', file))
+    return
   endif
+  Open(file, isdirectory)
 enddef
 
 def voyager#mapping#up()
@@ -26,13 +26,11 @@ def voyager#mapping#up()
   endif
   # NOTE: "curdir" has a path separator at the end.
   const parentdir = fnamemodify(curdir, ':h:h')
-  if !isdirectory(parentdir)
+  if !isdirectory(parentdir) # for safe
     voyager#util#echoerr(printf('Error: "%s" is not directory.', parentdir))
     return
   endif
-  const keepalt   = get(g:, 'voyager_keepalt',   false) ? 'keepalt'   : ''
-  const keepjumps = get(g:, 'voyager_keepjumps', false) ? 'keepjumps' : ''
-  execute keepalt keepjumps 'edit' fnameescape(parentdir)
+  Open(parentdir, true)
   const prevdirname = fnamemodify(curdir, ':h:t')
   voyager#set_cursor(prevdirname .. '/')
 enddef
@@ -51,6 +49,14 @@ def voyager#mapping#toggle_hidden()
   voyager#mapping#reload()
 enddef
 
+
+def Open(file: string, isdirectory: bool)
+  # NOTE: "silent" is used to suppress "{directory} is a directory" message.
+  const silent = isdirectory ? 'silent' : ''
+  const keepalt   = get(g:, 'voyager_keepalt',   false) ? 'keepalt'   : ''
+  const keepjumps = get(g:, 'voyager_keepjumps', false) ? 'keepjumps' : ''
+  execute silent keepalt keepjumps 'edit' fnameescape(file)
+enddef
 
 def BeepIfNeeded()
   const nobeep = get(g:, 'voyager_nobeep', &belloff =~ 'error')
