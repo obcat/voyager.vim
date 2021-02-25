@@ -38,5 +38,4 @@ jobs:
         env:
           THEMIS_VIM: ${{ steps.vim.outputs.executable }}
         run: |
-          ${{ steps.vim.outputs.executable }} --version
           ./vim-themis/bin/themis
