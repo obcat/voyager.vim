@@ -1,8 +1,10 @@
 # 🛰 voyager.vim
 
-Minimal file exploror written in Vim9 script
+[![CI](https://github.com/obcat/voyager.vim/workflows/CI/badge.svg)](https://github.com/obcat/voyager.vim/actions?query=workflow%3Aci)
 
-⚠️ **LIMITATIONS**
+Minimal file exploror written in Vim9 script.
+
+**LIMITATIONS**
 
 * This plugin is written in Vim9 script, but the specification of Vim9 is not
 yet stable. I guarantee this works fine on the Vim that I use, but it is also
