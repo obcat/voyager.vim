@@ -9,8 +9,7 @@ def voyager#init(dir: string)
   if get(b:, 'voyager_initialized', false) && getline('.') != ''
     return
   endif
-
-  # This will source "ftplugin/voyager.vim" and "syntax/voyager.vim."
+  # This will source "ftplugin/voyager.vim" and "syntax/voyager.vim".
   setlocal filetype=voyager
 
   setlocal modifiable
@@ -56,7 +55,7 @@ def ListContents(dir: string)
 enddef
 
 def ReplaceAllLines(lines: list<string>)
-  # NOTE: "silent" is used to suppress "--No lines in buffer--" message.
+  # "silent" is used to suppress "--No lines in buffer--" message.
   silent keepjumps :% delete _
   setline(1, lines)
 enddef

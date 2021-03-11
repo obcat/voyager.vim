@@ -13,9 +13,9 @@ def voyager#file#get_filenames(dir: string): list<string>
   return files->mapnew((_, file) => file.name .. (file.isdir ? '/' : ''))
 enddef
 
-# Add new entry with "isidir" key. The value is:
-#   * true if specified file is directory or symlink to directory,
-#   * false if not.
+
+# Add a new entry with "isidir" key to each file info. The value is true if
+# the file is a directory or a symbolic link to a directory, false otherwise.
 def AddMetadata(files: list<dict<any>>)
   for file in files
     file.isdir = file.type is 'dir' || file.type is 'linkd'
@@ -36,9 +36,9 @@ def Compare(f1: dict<any>, f2: dict<any>): number
     if n1[i] is n2[i]
       continue
     endif
-    # Dictionary order
+    # Dictionary order {{{
     # NOTE: When comparing two strings with "<" or ">", this is done with
-    #       strcmp() or stricmp() internally. See ":h expr-<".
+    #       strcmp() or stricmp() internally. See ":h expr-<". }}}
     return n1[i] < n2[i] ? -1 : +1
   endfor
   # Shorter first

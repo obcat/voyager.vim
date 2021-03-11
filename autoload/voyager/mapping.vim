@@ -24,7 +24,7 @@ def voyager#mapping#up()
     BeepIfNeeded()
     return
   endif
-  # NOTE: "curdir" has a path separator at the end.
+  # "curdir" has a path separator at the end so ":h:h" is used here.
   const parentdir = fnamemodify(curdir, ':h:h')
   if !isdirectory(parentdir) # for safe
     voyager#util#echoerr(printf('Error: "%s" is not directory.', parentdir))
@@ -51,7 +51,7 @@ enddef
 
 
 def Open(file: string, isdirectory: bool)
-  # NOTE: "silent" is used to suppress "{directory} is a directory" message.
+  # "silent" is used to suppress "{directory} is a directory" message.
   const silent = isdirectory ? 'silent' : ''
   const keepalt   = get(g:, 'voyager_keepalt',   false) ? 'keepalt'   : ''
   const keepjumps = get(g:, 'voyager_keepjumps', false) ? 'keepjumps' : ''
