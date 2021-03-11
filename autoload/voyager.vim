@@ -6,7 +6,7 @@ vim9script
 import messages from '../import/voyager/messages.vim'
 
 def voyager#init(dir: string)
-  if get(b:, 'voyager_initialized', false) && !empty(getline('.'))
+  if get(b:, 'voyager_initialized', false) && getline('.') != ''
     return
   endif
 
@@ -19,7 +19,7 @@ def voyager#init(dir: string)
 
   if b:voyager_state is 'files'
     const altfile = expand('#:p')
-    if !empty(altfile) && !isdirectory(altfile)
+    if altfile != '' && !isdirectory(altfile)
       voyager#set_cursor(fnamemodify(altfile, ':t'))
     endif
   endif
