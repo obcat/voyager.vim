@@ -1,4 +1,4 @@
-vim9script
+vim9script noclear
 # voyager - Minimal file explorer
 # Maintainer: obcat <obcat@icloud.com>
 # License:    MIT License
